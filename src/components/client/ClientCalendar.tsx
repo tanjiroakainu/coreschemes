@@ -10,7 +10,6 @@ import { getClientAvailability, getRequests, getCurrentUser, getRequestById, Cli
 
 const ClientCalendar = () => {
   const [currentEvents, setCurrentEvents] = useState<EventInput[]>([]);
-  const [availabilityEvents, setAvailabilityEvents] = useState<EventInput[]>([]);
   const [isRequestFormOpen, setIsRequestFormOpen] = useState(false);
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string>('');
@@ -94,7 +93,6 @@ const ClientCalendar = () => {
       
       // Don't load or display availability events to clients
       // Availability is only used to block requests, not to display
-      setAvailabilityEvents([]);
     }
   };
 

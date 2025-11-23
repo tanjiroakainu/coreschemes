@@ -15,7 +15,6 @@ import {
 import RequestDetailsDialog from '@/components/client/RequestDetailsDialog';
 
 interface AvailabilityFormProps {
-  selectedDate: string | null;
   existingAvailability: ClientAvailability | null;
   onSave: (available: boolean, notes?: string) => void;
   onDelete: () => void;
@@ -24,7 +23,7 @@ interface AvailabilityFormProps {
   requestCount?: number;
 }
 
-const AvailabilityForm = ({ selectedDate, existingAvailability, onSave, onDelete, onClose, onViewRequests, requestCount = 0 }: AvailabilityFormProps) => {
+const AvailabilityForm = ({ existingAvailability, onSave, onDelete, onClose, onViewRequests, requestCount = 0 }: AvailabilityFormProps) => {
   const [available, setAvailable] = useState<boolean>(existingAvailability?.available ?? true);
   const [notes, setNotes] = useState<string>(existingAvailability?.notes || '');
 
@@ -374,7 +373,6 @@ const ClientAvailabilityCalendar = () => {
           </DialogHeader>
 
           <AvailabilityForm
-            selectedDate={selectedDate}
             existingAvailability={selectedAvailability}
             requestCount={selectedDate ? getRequestCountForDate(selectedDate) : 0}
             onSave={(available, notes) => {
