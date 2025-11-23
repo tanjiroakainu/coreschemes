@@ -1,12 +1,23 @@
-import { FormEvent, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { FormEvent, useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { signInWithPassword, getCurrentUser, getRedirectPathFromPosition, getStaffers } from '@/lib/storage';
 import { MdOutlineLogin } from 'react-icons/md';
 import Footer from '@/components/shared/Footer';
 
 export default function Login() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+
+  // Check for registration success parameter
+  useEffect(() => {
+    if (searchParams.get('registered') === 'true') {
+      setSuccessMessage('Registration successful! Please login with your credentials.');
+      // Clear the URL parameter
+      navigate('/', { replace: true });
+    }
+  }, [searchParams, navigate]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -95,6 +106,11 @@ export default function Login() {
             {errorMessage && (
               <p className="text-red-500 mb-4 text-sm text-center">
                 {errorMessage}
+              </p>
+            )}
+            {successMessage && (
+              <p className="text-green-600 mb-4 text-sm text-center bg-green-50 border border-green-200 rounded px-4 py-2">
+                {successMessage}
               </p>
             )}
 

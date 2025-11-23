@@ -126,8 +126,10 @@ export default function ClientRegister() {
         avatar: formData.avatar,
       });
 
-      // Redirect to login
-      navigate('/');
+      // Show success message and redirect to login
+      setError('');
+      // Redirect to login with success parameter
+      navigate('/?registered=true');
     } catch (err: any) {
       setError(err.message || 'Registration failed. Please try again.');
     }
