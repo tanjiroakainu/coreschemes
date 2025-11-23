@@ -100,9 +100,12 @@ const ClientCalendar = () => {
     // Format date as YYYY-MM-DD
     const dateStr = selectInfo.startStr.split('T')[0];
     
-    // Check if date is available
+    // Check if date is available (normalize date format for comparison)
     const availability = getClientAvailability();
-    const dateAvailability = availability.find(a => a.date === dateStr);
+    const dateAvailability = availability.find(a => {
+      const availDate = a.date.split('T')[0];
+      return availDate === dateStr;
+    });
     
     // Only allow request if date is available (or not set)
     // This is hidden from clients - they just get a message if date is unavailable

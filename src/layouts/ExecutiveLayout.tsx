@@ -11,7 +11,7 @@ import { FaBars } from 'react-icons/fa';
 import { BiDockLeft, BiDockRight } from 'react-icons/bi';
 import { MdLogout } from 'react-icons/md';
 import { FaRegCircleUser } from 'react-icons/fa6';
-import { MdOutlineAssignmentTurnedIn, MdPeople, MdMonitor, MdFactCheck } from 'react-icons/md';
+import { MdOutlineAssignmentTurnedIn, MdPeople, MdMonitor, MdFactCheck, MdClose } from 'react-icons/md';
 import { signOut } from '@/lib/storage';
 
 interface ExecutiveLayoutProps {
@@ -131,6 +131,14 @@ export default function ExecutiveLayout({ rolePath, roleName: _roleName }: Execu
               label="Completed"
               collapsed={collapsed}
               active={isActive('/completed')}
+              onClick={() => setSidebarOpen(false)}
+            />
+            <SidebarLink
+              href={`/${rolePath}/rejected`}
+              icon={<MdClose size={22} />}
+              label="Rejected"
+              collapsed={collapsed}
+              active={isActive('/rejected')}
               onClick={() => setSidebarOpen(false)}
             />
             <SidebarLink

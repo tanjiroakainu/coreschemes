@@ -318,6 +318,26 @@ export default function RegularStaffAssignment() {
                           {selectedAssignment.status.charAt(0).toUpperCase() + selectedAssignment.status.slice(1)}
                         </span>
                       </div>
+                      {selectedAssignment.status === 'rejected' && selectedAssignment.rejectionReason && (
+                        <>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-500 mb-1">Rejected By</label>
+                            <p className="text-gray-900">{selectedAssignment.rejectedBy || 'N/A'}</p>
+                          </div>
+                          {selectedAssignment.rejectedAt && (
+                            <div>
+                              <label className="block text-sm font-medium text-gray-500 mb-1">Rejected On</label>
+                              <p className="text-gray-900">{formatDate(selectedAssignment.rejectedAt)}</p>
+                            </div>
+                          )}
+                          <div>
+                            <label className="block text-sm font-medium text-gray-500 mb-1">Rejection Reason</label>
+                            <p className="text-gray-900 whitespace-pre-wrap bg-red-50 p-3 rounded border border-red-200">
+                              {selectedAssignment.rejectionReason}
+                            </p>
+                          </div>
+                        </>
+                      )}
                       {request && selectedAssignment.notes && (
                         <div>
                           <label className="block text-sm font-medium text-gray-500 mb-1">Task Notes</label>

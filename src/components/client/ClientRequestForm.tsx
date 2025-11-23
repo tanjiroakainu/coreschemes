@@ -96,10 +96,27 @@ export default function ClientRequestForm({
     try {
       const currentUser = getCurrentUser();
       
+      // Ensure date is in YYYY-MM-DD format
+      let formattedDate = formData.date;
+      if (formData.date) {
+        // If date is in a different format, convert it
+        const dateObj = new Date(formData.date);
+        if (!isNaN(dateObj.getTime())) {
+          formattedDate = dateObj.toISOString().split('T')[0];
+        }
+      }
+      
       if (editingRequest) {
-        // Update existing request
+        // Update existing request - only allow editing if status is pending
+        if (editingRequest.status !== 'pending') {
+          setError('Only pending requests can be edited.');
+          setIsSubmitting(false);
+          return;
+        }
+        
         updateRequest(editingRequest.id, {
           ...formData,
+          date: formattedDate,
           attachedFile: formData.attachedFile,
           fileName: formData.fileName,
         });
@@ -107,6 +124,7 @@ export default function ClientRequestForm({
         // Create new request
         createRequest({
           ...formData,
+          date: formattedDate,
           attachedFile: formData.attachedFile,
           fileName: formData.fileName,
           status: 'pending',

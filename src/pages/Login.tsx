@@ -132,6 +132,14 @@ export default function Login() {
                 Login
               </button>
             </form>
+            <div className="mt-4 text-center">
+              <p className="text-sm text-gray-600">
+                New client?{' '}
+                <a href="/register" className="text-amber-600 hover:text-amber-700 underline">
+                  Register here
+                </a>
+              </p>
+            </div>
           </div>
         </div>
       </div>

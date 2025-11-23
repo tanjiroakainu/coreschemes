@@ -708,6 +708,40 @@ export default function AssignmentNotification({ role: _role }: AssignmentNotifi
                           {selectedAssignment.status.charAt(0).toUpperCase() + selectedAssignment.status.slice(1)}
                         </span>
                       </div>
+                      {selectedAssignment.status === 'rejected' && selectedAssignment.rejectionReason && (
+                        <>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-500 mb-1">Rejected By</label>
+                            <p className="text-gray-900">{selectedAssignment.rejectedBy || 'N/A'}</p>
+                          </div>
+                          {selectedAssignment.rejectedAt && (
+                            <div>
+                              <label className="block text-sm font-medium text-gray-500 mb-1">Rejected On</label>
+                              <p className="text-gray-900">{formatDate(selectedAssignment.rejectedAt)}</p>
+                            </div>
+                          )}
+                          <div>
+                            <label className="block text-sm font-medium text-gray-500 mb-1">Rejection Reason</label>
+                            <p className="text-gray-900 whitespace-pre-wrap bg-red-50 p-3 rounded border border-red-200">
+                              {selectedAssignment.rejectionReason}
+                            </p>
+                          </div>
+                        </>
+                      )}
+                      {selectedAssignment.status === 'approved' && selectedAssignment.approvedBy && (
+                        <>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-500 mb-1">Approved By</label>
+                            <p className="text-gray-900">{selectedAssignment.approvedBy}</p>
+                          </div>
+                          {selectedAssignment.approvedAt && (
+                            <div>
+                              <label className="block text-sm font-medium text-gray-500 mb-1">Approved On</label>
+                              <p className="text-gray-900">{formatDate(selectedAssignment.approvedAt)}</p>
+                            </div>
+                          )}
+                        </>
+                      )}
                       {selectedAssignment.notes && request && (
                         <div>
                           <label className="block text-sm font-medium text-gray-500 mb-1">Task Notes</label>

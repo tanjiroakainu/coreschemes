@@ -9,7 +9,7 @@ import {
 import { LuCalendarDays } from 'react-icons/lu';
 import { FaBars } from 'react-icons/fa';
 import { BiDockLeft, BiDockRight } from 'react-icons/bi';
-import { MdLogout, MdOutlineAssignmentTurnedIn, MdMonitor, MdFactCheck } from 'react-icons/md';
+import { MdLogout, MdOutlineAssignmentTurnedIn, MdMonitor, MdFactCheck, MdClose } from 'react-icons/md';
 import { FaRegCircleUser } from 'react-icons/fa6';
 import { MdDashboard } from 'react-icons/md';
 import { signOut } from '@/lib/storage';
@@ -138,34 +138,62 @@ export default function RoleLayout({ rolePath, roleName: _roleName }: RoleLayout
                   {!collapsed && <span>Notifications</span>}
                 </Link>
                 {(rolePath === 'scribe' || rolePath === 'creative' || rolePath === 'managerial') && (
-                  <Link
-                    to={`/${rolePath}/completed`}
-                    className={`flex items-center gap-3 px-3 py-2 rounded transition-colors ${
-                      isActive('completed')
-                        ? 'bg-neutral-700 text-amber-500'
-                        : 'hover:bg-neutral-800 text-white'
-                    }`}
-                    onClick={() => setSidebarOpen(false)}
-                  >
-                    <MdFactCheck size={22} />
-                    {!collapsed && <span>Completed</span>}
-                  </Link>
+                  <>
+                    <Link
+                      to={`/${rolePath}/completed`}
+                      className={`flex items-center gap-3 px-3 py-2 rounded transition-colors ${
+                        isActive('completed')
+                          ? 'bg-neutral-700 text-amber-500'
+                          : 'hover:bg-neutral-800 text-white'
+                      }`}
+                      onClick={() => setSidebarOpen(false)}
+                    >
+                      <MdFactCheck size={22} />
+                      {!collapsed && <span>Completed</span>}
+                    </Link>
+                    <Link
+                      to={`/${rolePath}/rejected`}
+                      className={`flex items-center gap-3 px-3 py-2 rounded transition-colors ${
+                        isActive('rejected')
+                          ? 'bg-neutral-700 text-amber-500'
+                          : 'hover:bg-neutral-800 text-white'
+                      }`}
+                      onClick={() => setSidebarOpen(false)}
+                    >
+                      <MdClose size={22} />
+                      {!collapsed && <span>Rejected</span>}
+                    </Link>
+                  </>
                 )}
               </>
             )}
             {rolePath === 'regular-staff' && (
-              <Link
-                to={`/${rolePath}/coverage`}
-                className={`flex items-center gap-3 px-3 py-2 rounded transition-colors ${
-                  isActive('coverage')
-                    ? 'bg-neutral-700 text-amber-500'
-                    : 'hover:bg-neutral-800 text-white'
-                }`}
-                onClick={() => setSidebarOpen(false)}
-              >
-                <MdMonitor size={22} />
-                {!collapsed && <span>Coverage</span>}
-              </Link>
+              <>
+                <Link
+                  to={`/${rolePath}/rejected`}
+                  className={`flex items-center gap-3 px-3 py-2 rounded transition-colors ${
+                    isActive('rejected')
+                      ? 'bg-neutral-700 text-amber-500'
+                      : 'hover:bg-neutral-800 text-white'
+                  }`}
+                  onClick={() => setSidebarOpen(false)}
+                >
+                  <MdClose size={22} />
+                  {!collapsed && <span>Rejected</span>}
+                </Link>
+                <Link
+                  to={`/${rolePath}/coverage`}
+                  className={`flex items-center gap-3 px-3 py-2 rounded transition-colors ${
+                    isActive('coverage')
+                      ? 'bg-neutral-700 text-amber-500'
+                      : 'hover:bg-neutral-800 text-white'
+                  }`}
+                  onClick={() => setSidebarOpen(false)}
+                >
+                  <MdMonitor size={22} />
+                  {!collapsed && <span>Coverage</span>}
+                </Link>
+              </>
             )}
           </nav>
 

@@ -325,6 +325,9 @@ export interface Staffer {
   avatar?: string;
   createdAt?: string;
   updatedAt?: string;
+  classification?: string; // For client registration
+  segment?: string; // For client registration
+  othersSpecify?: string; // For client registration
 }
 
 // Map staffer position to user role

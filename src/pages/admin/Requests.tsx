@@ -17,6 +17,7 @@ export default function AdminRequests() {
   const [selectedRequest, setSelectedRequest] = useState<ClientRequest | null>(null);
   const [requestToDeny, setRequestToDeny] = useState<string | null>(null);
   const [requestAssignmentsMap, setRequestAssignmentsMap] = useState<Record<string, number>>({});
+  const [requestRejectedAssignmentsMap, setRequestRejectedAssignmentsMap] = useState<Record<string, Assignment[]>>({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,12 +50,20 @@ export default function AdminRequests() {
 
     const assignments = getAssignments();
     const map: Record<string, number> = {};
+    const rejectedMap: Record<string, Assignment[]> = {};
     assignments.forEach((assignment: Assignment) => {
       if (assignment.requestId) {
         map[assignment.requestId] = (map[assignment.requestId] || 0) + 1;
+        if (assignment.status === 'rejected') {
+          if (!rejectedMap[assignment.requestId]) {
+            rejectedMap[assignment.requestId] = [];
+          }
+          rejectedMap[assignment.requestId].push(assignment);
+        }
       }
     });
     setRequestAssignmentsMap(map);
+    setRequestRejectedAssignmentsMap(rejectedMap);
   };
 
   const handleRowClick = (request: ClientRequest) => {
@@ -64,6 +73,10 @@ export default function AdminRequests() {
 
   const getAssignmentCount = (requestId: string): number => {
     return requestAssignmentsMap[requestId] || 0;
+  };
+
+  const getRejectedAssignments = (requestId: string): Assignment[] => {
+    return requestRejectedAssignmentsMap[requestId] || [];
   };
 
   const handleAssignFromRequests = (requestId: string) => {
@@ -402,6 +415,26 @@ export default function AdminRequests() {
                 <MdCheck size={18} />
                 Approve
               </Button>
+            </div>
+          ) : selectedRequest && getRejectedAssignments(selectedRequest.id).length > 0 ? (
+            <div className="pt-4 border-t">
+              <div className="mb-3">
+                <h3 className="text-sm font-semibold text-gray-700 mb-2">Rejected Assignments</h3>
+                <div className="space-y-2">
+                  {getRejectedAssignments(selectedRequest.id).map((assignment: Assignment) => (
+                    <div key={assignment.id} className="bg-red-50 border border-red-200 rounded-md p-3">
+                      <p className="text-sm font-medium text-gray-900">
+                        {assignment.assignedToName || 'N/A'} - Rejected by {assignment.rejectedBy || 'N/A'}
+                      </p>
+                      {assignment.rejectionReason && (
+                        <p className="text-xs text-gray-700 mt-1 whitespace-pre-wrap">
+                          {assignment.rejectionReason}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           ) : undefined
         }

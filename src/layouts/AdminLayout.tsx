@@ -11,6 +11,7 @@ import {
   MdOutlineDashboard,
   MdOutlineAssignmentTurnedIn,
   MdFactCheck,
+  MdClose,
 } from 'react-icons/md';
 import { LuCalendarDays } from 'react-icons/lu';
 import { FaUsers, FaBars } from 'react-icons/fa';
@@ -145,6 +146,13 @@ export default function AdminLayout() {
               onClick={() => setSidebarOpen(false)}
             />
             <SidebarLink
+              href="/admin/rejected"
+              icon={<MdClose size={22} />}
+              label="Rejected"
+              collapsed={collapsed}
+              onClick={() => setSidebarOpen(false)}
+            />
+            <SidebarLink
               href="/admin/requests"
               icon={<MdOutlineAssignmentTurnedIn size={22} />}
               label="Requests"
@@ -155,6 +163,13 @@ export default function AdminLayout() {
               href="/admin/staffer"
               icon={<FaUsers size={22} />}
               label="Staffers"
+              collapsed={collapsed}
+              onClick={() => setSidebarOpen(false)}
+            />
+            <SidebarLink
+              href="/admin/clients"
+              icon={<FaUsers size={22} />}
+              label="Clients"
               collapsed={collapsed}
               onClick={() => setSidebarOpen(false)}
             />

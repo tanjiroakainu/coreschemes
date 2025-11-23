@@ -13,7 +13,9 @@ import AdminCalendar from './pages/admin/Calendar';
 import AdminClientAvailabilityCalendar from './pages/admin/ClientAvailabilityCalendar';
 import AdminAssignment from './pages/admin/Assignment';
 import AdminCompletedAssignments from './pages/admin/CompletedAssignments';
+import AdminRejectedAssignments from './pages/admin/RejectedAssignments';
 import AdminStaffer from './pages/admin/Staffer';
+import AdminClientManagement from './pages/admin/ClientManagement';
 import AdminSettings from './pages/admin/Settings';
 import AdminRequests from './pages/admin/Requests';
 
@@ -30,6 +32,7 @@ import StafferAssignmentNotification from './pages/staffer/AssignmentNotificatio
 // Client pages
 import ClientCalendar from './pages/client/Calendar';
 import ClientRequest from './pages/client/Request';
+import ClientRegister from './pages/client/Register';
 
 // Role-specific pages
 import EditorInChiefDashboard from './pages/editor-in-chief/Dashboard';
@@ -39,33 +42,41 @@ import EditorInChiefCoverage from './pages/editor-in-chief/Coverage';
 import EditorInChiefProfile from './pages/editor-in-chief/Profile';
 import EditorInChiefAssignmentNotification from './pages/editor-in-chief/AssignmentNotification';
 import EditorInChiefCompletedAssignments from './pages/editor-in-chief/CompletedAssignments';
+import EditorInChiefRejectedAssignments from './pages/editor-in-chief/RejectedAssignments';
 import AssociateEditorDashboard from './pages/associate-editor/Dashboard';
 import AssociateEditorAssignmentNotification from './pages/associate-editor/AssignmentNotification';
 import AssociateEditorCompletedAssignments from './pages/associate-editor/CompletedAssignments';
+import AssociateEditorRejectedAssignments from './pages/associate-editor/RejectedAssignments';
 import ManagingEditorDashboard from './pages/managing-editor/Dashboard';
 import ManagingEditorAssignmentNotification from './pages/managing-editor/AssignmentNotification';
 import ManagingEditorCompletedAssignments from './pages/managing-editor/CompletedAssignments';
+import ManagingEditorRejectedAssignments from './pages/managing-editor/RejectedAssignments';
 import ExecutiveSecretaryDashboard from './pages/executive-secretary/Dashboard';
 import ExecutiveSecretaryAssignmentNotification from './pages/executive-secretary/AssignmentNotification';
 import ExecutiveSecretaryCompletedAssignments from './pages/executive-secretary/CompletedAssignments';
+import ExecutiveSecretaryRejectedAssignments from './pages/executive-secretary/RejectedAssignments';
 import ScribeCalendar from './pages/scribe/Calendar';
 import ScribeDashboard from './pages/scribe/Dashboard';
 import ScribeAssignment from './pages/scribe/Assignment';
 import ScribeAssignmentNotification from './pages/scribe/AssignmentNotification';
 import ScribeCompletedAssignments from './pages/scribe/CompletedAssignments';
+import ScribeRejectedAssignments from './pages/scribe/RejectedAssignments';
 import CreativeCalendar from './pages/creative/Calendar';
 import CreativeDashboard from './pages/creative/Dashboard';
 import CreativeAssignment from './pages/creative/Assignment';
 import CreativeAssignmentNotification from './pages/creative/AssignmentNotification';
 import CreativeCompletedAssignments from './pages/creative/CompletedAssignments';
+import CreativeRejectedAssignments from './pages/creative/RejectedAssignments';
 import ManagerialCalendar from './pages/managerial/Calendar';
 import ManagerialDashboard from './pages/managerial/Dashboard';
 import ManagerialAssignment from './pages/managerial/Assignment';
 import ManagerialAssignmentNotification from './pages/managerial/AssignmentNotification';
 import ManagerialCompletedAssignments from './pages/managerial/CompletedAssignments';
+import ManagerialRejectedAssignments from './pages/managerial/RejectedAssignments';
 import RegularStaffAssignment from './pages/regular-staff/Assignment';
 import RegularStaffCoverage from './pages/regular-staff/Coverage';
 import RegularStaffAssignmentNotification from './pages/regular-staff/AssignmentNotification';
+import RegularStaffRejectedAssignments from './pages/regular-staff/RejectedAssignments';
 
 // Staffer pages
 import StafferProfile from './pages/staffer/Profile';
@@ -80,6 +91,7 @@ function App() {
     >
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/register" element={<ClientRegister />} />
         
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>
@@ -88,8 +100,10 @@ function App() {
           <Route path="client-availability" element={<AdminClientAvailabilityCalendar />} />
           <Route path="assignment" element={<AdminAssignment />} />
           <Route path="completed" element={<AdminCompletedAssignments />} />
+          <Route path="rejected" element={<AdminRejectedAssignments />} />
           <Route path="requests" element={<AdminRequests />} />
           <Route path="staffer" element={<AdminStaffer />} />
+          <Route path="clients" element={<AdminClientManagement />} />
           <Route path="settings" element={<AdminSettings />} />
           <Route index element={<Navigate to="/admin/dashboard" replace />} />
         </Route>
@@ -125,6 +139,7 @@ function App() {
           <Route path="assignment" element={<EditorInChiefAssignment />} />
           <Route path="assignment-notification" element={<EditorInChiefAssignmentNotification />} />
           <Route path="completed" element={<EditorInChiefCompletedAssignments />} />
+          <Route path="rejected" element={<EditorInChiefRejectedAssignments />} />
           <Route path="coverage" element={<EditorInChiefCoverage />} />
           <Route path="profile" element={<EditorInChiefProfile />} />
           <Route index element={<Navigate to="/editor-in-chief/my-team" replace />} />
@@ -136,6 +151,7 @@ function App() {
           <Route path="assignment" element={<EditorInChiefAssignment />} />
           <Route path="assignment-notification" element={<AssociateEditorAssignmentNotification />} />
           <Route path="completed" element={<AssociateEditorCompletedAssignments />} />
+          <Route path="rejected" element={<AssociateEditorRejectedAssignments />} />
           <Route path="coverage" element={<EditorInChiefCoverage />} />
           <Route index element={<Navigate to="/associate-editor/my-team" replace />} />
         </Route>
@@ -146,6 +162,7 @@ function App() {
           <Route path="assignment" element={<EditorInChiefAssignment />} />
           <Route path="assignment-notification" element={<ManagingEditorAssignmentNotification />} />
           <Route path="completed" element={<ManagingEditorCompletedAssignments />} />
+          <Route path="rejected" element={<ManagingEditorRejectedAssignments />} />
           <Route path="coverage" element={<EditorInChiefCoverage />} />
           <Route index element={<Navigate to="/managing-editor/my-team" replace />} />
         </Route>
@@ -156,6 +173,7 @@ function App() {
           <Route path="assignment" element={<EditorInChiefAssignment />} />
           <Route path="assignment-notification" element={<ExecutiveSecretaryAssignmentNotification />} />
           <Route path="completed" element={<ExecutiveSecretaryCompletedAssignments />} />
+          <Route path="rejected" element={<ExecutiveSecretaryRejectedAssignments />} />
           <Route path="coverage" element={<EditorInChiefCoverage />} />
           <Route index element={<Navigate to="/executive-secretary/my-team" replace />} />
         </Route>
@@ -166,6 +184,7 @@ function App() {
           <Route path="assignment" element={<ScribeAssignment />} />
           <Route path="assignment-notification" element={<ScribeAssignmentNotification />} />
           <Route path="completed" element={<ScribeCompletedAssignments />} />
+          <Route path="rejected" element={<ScribeRejectedAssignments />} />
           <Route index element={<Navigate to="/scribe/dashboard" replace />} />
         </Route>
 
@@ -175,6 +194,7 @@ function App() {
           <Route path="assignment" element={<CreativeAssignment />} />
           <Route path="assignment-notification" element={<CreativeAssignmentNotification />} />
           <Route path="completed" element={<CreativeCompletedAssignments />} />
+          <Route path="rejected" element={<CreativeRejectedAssignments />} />
           <Route index element={<Navigate to="/creative/dashboard" replace />} />
         </Route>
 
@@ -184,6 +204,7 @@ function App() {
           <Route path="assignment" element={<ManagerialAssignment />} />
           <Route path="assignment-notification" element={<ManagerialAssignmentNotification />} />
           <Route path="completed" element={<ManagerialCompletedAssignments />} />
+          <Route path="rejected" element={<ManagerialRejectedAssignments />} />
           <Route index element={<Navigate to="/managerial/dashboard" replace />} />
         </Route>
 
@@ -192,6 +213,7 @@ function App() {
           <Route path="calendar" element={<ManagerialCalendar />} />
           <Route path="assignment" element={<RegularStaffAssignment />} />
           <Route path="assignment-notification" element={<RegularStaffAssignmentNotification />} />
+          <Route path="rejected" element={<RegularStaffRejectedAssignments />} />
           <Route path="coverage" element={<RegularStaffCoverage />} />
           <Route index element={<Navigate to="/regular-staff/dashboard" replace />} />
         </Route>

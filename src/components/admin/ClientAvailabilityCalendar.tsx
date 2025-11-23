@@ -3,7 +3,7 @@ import { DateSelectArg, EventInput } from '@fullcalendar/core';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { getClientAvailability, setClientAvailability, deleteClientAvailability, ClientAvailability, getRequests, ClientRequest } from '@/lib/storage';
+import { getClientAvailability, setClientAvailability, deleteClientAvailability, ClientAvailability, getRequests, ClientRequest, updateRequest, getCurrentUser } from '@/lib/storage';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -168,10 +168,10 @@ const ClientAvailabilityCalendar = () => {
     // Get all client requests to show which dates have requests
     const allRequests = getRequests();
     
-    // Group requests by date
+    // Group requests by date (normalize date format)
     const requestsByDate = new Map<string, number>();
     allRequests.forEach((request) => {
-      const dateStr = request.date;
+      const dateStr = request.date.split('T')[0]; // Normalize to YYYY-MM-DD
       requestsByDate.set(dateStr, (requestsByDate.get(dateStr) || 0) + 1);
     });
     
@@ -180,15 +180,16 @@ const ClientAvailabilityCalendar = () => {
     
     // Add availability events
     avail.forEach((item) => {
-      const requestCount = requestsByDate.get(item.date) || 0;
+      const normalizedDate = item.date.split('T')[0];
+      const requestCount = requestsByDate.get(normalizedDate) || 0;
       const title = item.available 
         ? (requestCount > 0 ? `✓ Available (${requestCount} request${requestCount > 1 ? 's' : ''})` : '✓ Available')
         : (requestCount > 0 ? `🚫 Not Available (${requestCount} request${requestCount > 1 ? 's' : ''})` : '🚫 Not Available');
       
       events.push({
-        id: `availability-${item.date}`,
+        id: `availability-${normalizedDate}`,
         title: title,
-        start: item.date,
+        start: normalizedDate,
         allDay: true,
         backgroundColor: item.available ? '#10b981' : '#ef4444',
         borderColor: item.available ? '#10b981' : '#ef4444',
@@ -204,7 +205,10 @@ const ClientAvailabilityCalendar = () => {
     
     // Add client request events for dates without availability settings
     requestsByDate.forEach((count, dateStr) => {
-      const hasAvailability = avail.some(a => a.date === dateStr);
+      const hasAvailability = avail.some(a => {
+        const availDate = a.date.split('T')[0];
+        return availDate === dateStr;
+      });
       if (!hasAvailability) {
         // Date has requests but no availability setting
         events.push({
@@ -251,14 +255,20 @@ const ClientAvailabilityCalendar = () => {
     if (event) {
       const dateStr = info.event.startStr?.split('T')[0] || '';
       if (dateStr) {
-        // Get all requests for this date
+        // Get all requests for this date (normalize date format for comparison)
         const allRequests = getRequests();
-        const requestsForDate = allRequests.filter(req => req.date === dateStr);
+        const requestsForDate = allRequests.filter(req => {
+          const reqDate = req.date.split('T')[0];
+          return reqDate === dateStr;
+        });
         setDateRequests(requestsForDate);
         setSelectedDate(dateStr);
         
         // Check if availability already exists for this date
-        const existing = availability.find(a => a.date === dateStr);
+        const existing = availability.find(a => {
+          const availDate = a.date.split('T')[0];
+          return availDate === dateStr;
+        });
         if (existing) {
           setSelectedAvailability(existing);
         } else {
@@ -272,17 +282,57 @@ const ClientAvailabilityCalendar = () => {
 
   const getRequestCountForDate = (dateStr: string): number => {
     const allRequests = getRequests();
-    return allRequests.filter(req => req.date === dateStr).length;
+    const normalizedDate = dateStr.split('T')[0];
+    return allRequests.filter(req => {
+      const reqDate = req.date.split('T')[0];
+      return reqDate === normalizedDate;
+    }).length;
   };
 
   const handleSaveAvailability = (available: boolean, notes?: string) => {
     if (!selectedDate) return;
     
+    // Update availability
     setClientAvailability(selectedDate, available, notes);
+    
+    // Update all pending requests for this date based on availability status
+    const allRequests = getRequests();
+    // Normalize date format to YYYY-MM-DD for comparison
+    const normalizedDate = selectedDate.split('T')[0];
+    const requestsForDate = allRequests.filter(req => {
+      const reqDate = req.date.split('T')[0];
+      return reqDate === normalizedDate;
+    });
+    const currentUser = getCurrentUser();
+    const adminName = currentUser?.name || 'Admin';
+    
+    requestsForDate.forEach((request) => {
+      if (request.status === 'pending') {
+        if (available) {
+          // Set as approved when availability is set to available
+          updateRequest(request.id, {
+            status: 'approved',
+            approvedBy: adminName,
+            dateApproved: new Date().toISOString(),
+          });
+        } else {
+          // Set as denied when availability is set to not available
+          updateRequest(request.id, {
+            status: 'denied',
+            deniedBy: adminName,
+            dateDenied: new Date().toISOString(),
+            reasonOfDenial: notes || 'Date marked as not available',
+          });
+        }
+      }
+    });
+    
+    // Reload availability and requests
     loadAvailability();
     setIsDialogOpen(false);
     setSelectedDate(null);
     setSelectedAvailability(null);
+    setDateRequests([]);
   };
 
   const handleDeleteAvailability = () => {

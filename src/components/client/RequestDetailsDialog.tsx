@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { ClientRequest, deleteRequest } from '@/lib/storage';
+import { ClientRequest, deleteRequest, getAssignments, Assignment } from '@/lib/storage';
 import { MdEdit, MdDelete, MdAttachFile } from 'react-icons/md';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 
@@ -30,7 +30,35 @@ export default function RequestDetailsDialog({
 
   if (!request) return null;
 
+  // Get rejected assignments for this request
+  const rejectedAssignments = getAssignments().filter(
+    (assignment: Assignment) => 
+      assignment.requestId === request.id && assignment.status === 'rejected'
+  );
+
+  const formatDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    } catch {
+      return dateString;
+    }
+  };
+
   const handleDelete = () => {
+    // Only allow deletion if status is pending
+    if (request.status !== 'pending') {
+      alert('Only pending requests can be deleted.');
+      setShowDeleteDialog(false);
+      return;
+    }
+    
     deleteRequest(request.id);
     setShowDeleteDialog(false);
     onOpenChange(false);
@@ -67,7 +95,7 @@ export default function RequestDetailsDialog({
             <DialogTitle>Details</DialogTitle>
           </DialogHeader>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-1">Title</label>
               <p className="text-gray-700">{request.title}</p>
@@ -149,6 +177,38 @@ export default function RequestDetailsDialog({
                   </div>
                 )}
               </>
+            )}
+            {rejectedAssignments.length > 0 && (
+              <div className="col-span-2 mt-4 pt-4 border-t">
+                <h3 className="text-sm font-semibold text-gray-700 mb-3">Rejected Assignments</h3>
+                <div className="space-y-3">
+                  {rejectedAssignments.map((assignment: Assignment) => (
+                    <div key={assignment.id} className="bg-red-50 border border-red-200 rounded-md p-3">
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-gray-900">
+                            Assigned to: {assignment.assignedToName || 'N/A'}
+                          </p>
+                          {assignment.rejectedBy && (
+                            <p className="text-xs text-gray-600 mt-1">
+                              Rejected by: {assignment.rejectedBy}
+                              {assignment.rejectedAt && ` on ${formatDate(assignment.rejectedAt)}`}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      {assignment.rejectionReason && (
+                        <div className="mt-2">
+                          <p className="text-xs font-medium text-gray-700 mb-1">Rejection Reason:</p>
+                          <p className="text-sm text-gray-900 whitespace-pre-wrap bg-white p-2 rounded border border-red-300">
+                            {assignment.rejectionReason}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
             )}
           </div>
 

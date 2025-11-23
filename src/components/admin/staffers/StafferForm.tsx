@@ -63,6 +63,9 @@ export default function StafferForm({
     position: '',
     section: (restrictSections && restrictSections.length > 0 ? restrictSections[0] : 'executives') as Staffer['section'],
     avatar: '',
+    classification: '',
+    segment: '',
+    othersSpecify: '',
   });
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
@@ -76,6 +79,9 @@ export default function StafferForm({
         position: editingStaffer.position,
         section: editingStaffer.section,
         avatar: editingStaffer.avatar || '',
+        classification: editingStaffer.classification || '',
+        segment: editingStaffer.segment || '',
+        othersSpecify: editingStaffer.othersSpecify || '',
       });
       setImagePreview(editingStaffer.avatar || null);
     } else {
@@ -92,6 +98,9 @@ export default function StafferForm({
         position: '',
         section: defaultSection,
         avatar: '',
+        classification: '',
+        segment: '',
+        othersSpecify: '',
       });
       setImagePreview(null);
     }
@@ -133,6 +142,9 @@ export default function StafferForm({
       position: formData.position,
       section: formData.section,
       avatar: formData.avatar,
+      classification: formData.classification || undefined,
+      segment: formData.segment || undefined,
+      othersSpecify: formData.othersSpecify || undefined,
     });
     onOpenChange(false);
   };
@@ -302,6 +314,52 @@ export default function StafferForm({
               )}
             </div>
           </div>
+
+          {/* Client Registration Fields */}
+          {(formData.position === 'Client' || formData.section === 'clients') && (
+            <div className="space-y-4 pt-4 border-t">
+              <h3 className="text-sm font-semibold text-gray-700">Client Registration Information</h3>
+              <div>
+                <label htmlFor="classification" className="block text-sm font-medium mb-1">
+                  Classification
+                </label>
+                <input
+                  type="text"
+                  id="classification"
+                  value={formData.classification}
+                  onChange={(e) => setFormData({ ...formData, classification: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Department, Office, Organization, etc."
+                />
+              </div>
+              <div>
+                <label htmlFor="segment" className="block text-sm font-medium mb-1">
+                  Segment
+                </label>
+                <input
+                  type="text"
+                  id="segment"
+                  value={formData.segment}
+                  onChange={(e) => setFormData({ ...formData, segment: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Item 1, Item 2, etc."
+                />
+              </div>
+              <div>
+                <label htmlFor="othersSpecify" className="block text-sm font-medium mb-1">
+                  Others Specify (Optional)
+                </label>
+                <input
+                  type="text"
+                  id="othersSpecify"
+                  value={formData.othersSpecify}
+                  onChange={(e) => setFormData({ ...formData, othersSpecify: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Specify if classification or segment is 'Others'"
+                />
+              </div>
+            </div>
+          )}
 
           <div className="flex flex-col sm:flex-row justify-end gap-2 pt-4">
             <button
