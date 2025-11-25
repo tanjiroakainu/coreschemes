@@ -118,6 +118,14 @@ export default function ExecutiveLayout({ rolePath, roleName: _roleName }: Execu
               onClick={() => setSidebarOpen(false)}
             />
             <SidebarLink
+              href={`/${rolePath}/client-availability`}
+              icon={<LuCalendarDays size={22} />}
+              label="Client Availability"
+              collapsed={collapsed}
+              active={isActive('client-availability')}
+              onClick={() => setSidebarOpen(false)}
+            />
+            <SidebarLink
               href={`/${rolePath}/assignment`}
               icon={<MdOutlineAssignmentTurnedIn size={22} />}
               label="Assignment"

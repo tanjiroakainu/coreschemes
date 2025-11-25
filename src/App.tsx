@@ -39,15 +39,19 @@ import EditorInChiefAssignment from './pages/editor-in-chief/Assignment';
 import EditorInChiefCoverage from './pages/editor-in-chief/Coverage';
 import EditorInChiefProfile from './pages/editor-in-chief/Profile';
 import EditorInChiefCalendar from './pages/editor-in-chief/Calendar';
+import EditorInChiefClientAvailability from './pages/editor-in-chief/ClientAvailability';
 import EditorInChiefAssignmentNotification from './pages/editor-in-chief/AssignmentNotification';
 import AssociateEditorDashboard from './pages/associate-editor/Dashboard';
 import AssociateEditorCalendar from './pages/associate-editor/Calendar';
+import AssociateEditorClientAvailability from './pages/associate-editor/ClientAvailability';
 import AssociateEditorAssignmentNotification from './pages/associate-editor/AssignmentNotification';
 import ManagingEditorDashboard from './pages/managing-editor/Dashboard';
 import ManagingEditorCalendar from './pages/managing-editor/Calendar';
+import ManagingEditorClientAvailability from './pages/managing-editor/ClientAvailability';
 import ManagingEditorAssignmentNotification from './pages/managing-editor/AssignmentNotification';
 import ExecutiveSecretaryDashboard from './pages/executive-secretary/Dashboard';
 import ExecutiveSecretaryCalendar from './pages/executive-secretary/Calendar';
+import ExecutiveSecretaryClientAvailability from './pages/executive-secretary/ClientAvailability';
 import ExecutiveSecretaryAssignmentNotification from './pages/executive-secretary/AssignmentNotification';
 import ScribeCalendar from './pages/scribe/Calendar';
 import ScribeDashboard from './pages/scribe/Dashboard';
@@ -70,7 +74,7 @@ import ManagerialRejectedAssignments from './pages/managerial/RejectedAssignment
 import RegularStaffAssignment from './pages/regular-staff/Assignment';
 import RegularStaffCoverage from './pages/regular-staff/Coverage';
 import RegularStaffAssignmentNotification from './pages/regular-staff/AssignmentNotification';
-import RegularStaffRejectedAssignments from './pages/regular-staff/RejectedAssignments';
+import RegularStaffCalendar from './pages/regular-staff/Calendar';
 
 // Staffer pages
 import StafferProfile from './pages/staffer/Profile';
@@ -128,6 +132,7 @@ function App() {
         <Route path="/editor-in-chief" element={<ExecutiveLayout rolePath="editor-in-chief" roleName="Editor-in-Chief" />}>
           <Route path="dashboard" element={<EditorInChiefDashboard />} />
           <Route path="calendar" element={<EditorInChiefCalendar />} />
+          <Route path="client-availability" element={<EditorInChiefClientAvailability />} />
           <Route path="my-team" element={<EditorInChiefMyTeam />} />
           <Route path="assignment" element={<EditorInChiefAssignment />} />
           <Route path="assignment-notification" element={<EditorInChiefAssignmentNotification />} />
@@ -139,6 +144,7 @@ function App() {
         <Route path="/associate-editor" element={<ExecutiveLayout rolePath="associate-editor" roleName="Associate Editor" />}>
           <Route path="dashboard" element={<AssociateEditorDashboard />} />
           <Route path="calendar" element={<AssociateEditorCalendar />} />
+          <Route path="client-availability" element={<AssociateEditorClientAvailability />} />
           <Route path="my-team" element={<EditorInChiefMyTeam />} />
           <Route path="assignment" element={<EditorInChiefAssignment />} />
           <Route path="assignment-notification" element={<AssociateEditorAssignmentNotification />} />
@@ -150,6 +156,7 @@ function App() {
         <Route path="/managing-editor" element={<ExecutiveLayout rolePath="managing-editor" roleName="Managing Editor" />}>
           <Route path="dashboard" element={<ManagingEditorDashboard />} />
           <Route path="calendar" element={<ManagingEditorCalendar />} />
+          <Route path="client-availability" element={<ManagingEditorClientAvailability />} />
           <Route path="my-team" element={<EditorInChiefMyTeam />} />
           <Route path="assignment" element={<EditorInChiefAssignment />} />
           <Route path="assignment-notification" element={<ManagingEditorAssignmentNotification />} />
@@ -161,6 +168,7 @@ function App() {
         <Route path="/executive-secretary" element={<ExecutiveLayout rolePath="executive-secretary" roleName="Executive Secretary" />}>
           <Route path="dashboard" element={<ExecutiveSecretaryDashboard />} />
           <Route path="calendar" element={<ExecutiveSecretaryCalendar />} />
+          <Route path="client-availability" element={<ExecutiveSecretaryClientAvailability />} />
           <Route path="my-team" element={<EditorInChiefMyTeam />} />
           <Route path="assignment" element={<EditorInChiefAssignment />} />
           <Route path="assignment-notification" element={<ExecutiveSecretaryAssignmentNotification />} />
@@ -201,10 +209,9 @@ function App() {
 
         <Route path="/regular-staff" element={<RoleLayout rolePath="regular-staff" roleName="Regular Staff" />}>
           <Route path="dashboard" element={<ManagerialDashboard />} />
-          <Route path="calendar" element={<ManagerialCalendar />} />
+          <Route path="calendar" element={<RegularStaffCalendar />} />
           <Route path="assignment" element={<RegularStaffAssignment />} />
           <Route path="assignment-notification" element={<RegularStaffAssignmentNotification />} />
-          <Route path="rejected" element={<RegularStaffRejectedAssignments />} />
           <Route path="coverage" element={<RegularStaffCoverage />} />
           <Route index element={<Navigate to="/regular-staff/dashboard" replace />} />
         </Route>

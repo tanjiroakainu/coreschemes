@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { getAssignmentsByStaffer, getCurrentUser, Assignment, updateAssignment, getRequestById, ClientRequest } from '@/lib/storage';
 import { Button } from '@/components/ui/button';
 import { MdInfo } from 'react-icons/md';
+import RejectedAssignments from '@/components/shared/RejectedAssignments';
 
 export default function RegularStaffAssignment() {
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [statusUpdatingId, setStatusUpdatingId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'my-assignments' | 'rejected'>('my-assignments');
 
   useEffect(() => {
     loadData();
@@ -79,9 +82,26 @@ export default function RegularStaffAssignment() {
 
   return (
     <div className="px-4 md:px-10 py-6 space-y-6">
-      <h1 className="text-xl sm:text-2xl font-bold text-amber-600">My Assignments</h1>
+      <h1 className="text-xl sm:text-2xl font-bold text-amber-600">Assignment</h1>
 
-      {assignments.length === 0 ? (
+      <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as typeof activeTab)}>
+        <TabsList className="bg-transparent border-b border-gray-200 rounded-none p-0 h-auto flex flex-wrap">
+          <TabsTrigger
+            value="my-assignments"
+            className="data-[state=active]:bg-transparent data-[state=active]:text-amber-600 data-[state=active]:border-b-2 data-[state=active]:border-amber-600 rounded-none"
+          >
+            My Assignments
+          </TabsTrigger>
+          <TabsTrigger
+            value="rejected"
+            className="data-[state=active]:bg-transparent data-[state=active]:text-amber-600 data-[state=active]:border-b-2 data-[state=active]:border-amber-600 rounded-none"
+          >
+            Rejected
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="my-assignments" className="-mt-6">
+          {assignments.length === 0 ? (
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
           <p className="text-gray-500">No assignments yet</p>
         </div>
@@ -229,7 +249,16 @@ export default function RegularStaffAssignment() {
             })}
           </div>
         </div>
-      )}
+          )}
+        </TabsContent>
+
+        <TabsContent value="rejected" className="-mt-6">
+          <RejectedAssignments
+            title="Rejected Assignments"
+            description="All rejected assignments for regular staff."
+          />
+        </TabsContent>
+      </Tabs>
 
       {/* Details Dialog */}
       {selectedAssignment && isDetailsOpen && (
