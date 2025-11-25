@@ -1,12 +1,11 @@
-import ReadOnlyCalendar from '@/components/shared/ReadOnlyCalendar';
+import RoleCalendar from '@/components/shared/RoleCalendar';
 import Footer from '@/components/shared/Footer';
 
 export default function ExecutiveSecretaryCalendar() {
   return (
     <>
-      <ReadOnlyCalendar role="executive-secretary" />
+      <RoleCalendar canEdit={true} filterByUser={false} />
       <Footer />
     </>
   );
 }
-

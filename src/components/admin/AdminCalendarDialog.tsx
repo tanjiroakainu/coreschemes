@@ -60,7 +60,12 @@ export default function EventDialogue({
       // Editing existing event - populate form
       const startDate = new Date(editEvent.start as string);
       const dateStr = startDate.toISOString().split('T')[0];
-      const timeStr = editEvent.startTime || startDate.toTimeString().slice(0, 5);
+      const startTime = editEvent.startTime || startDate.toTimeString().slice(0, 5);
+      const endTime = (editEvent as any).endTime || '';
+      // Format time as "HH:MM - HH:MM" if endTime exists and is different, otherwise just "HH:MM"
+      const timeStr = endTime && endTime !== startTime 
+        ? `${startTime} - ${endTime}`
+        : startTime;
       
       if (editEvent.task) {
         setTaskData({
@@ -275,10 +280,11 @@ export default function EventDialogue({
                 <div>
                   <label className="block text-sm font-medium mb-1">Time</label>
                   <input
-                    type="time"
+                    type="text"
                     value={eventData.time}
                     onChange={(e) => setEventData({ ...eventData, time: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    placeholder="HH:MM or HH:MM - HH:MM"
                   />
                 </div>
               </div>
@@ -366,10 +372,11 @@ export default function EventDialogue({
                 <div>
                   <label className="block text-sm font-medium mb-1">Time</label>
                   <input
-                    type="time"
+                    type="text"
                     value={taskData.time}
                     onChange={(e) => setTaskData({ ...taskData, time: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    placeholder="HH:MM or HH:MM - HH:MM"
                   />
                 </div>
               </div>

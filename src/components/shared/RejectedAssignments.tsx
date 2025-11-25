@@ -333,9 +333,17 @@ export default function RejectedAssignments({
                       )}
                       {selectedAssignment.rejectionReason && (
                         <div>
-                          <label className="block text-sm font-medium text-gray-500 mb-1">Rejection Reason</label>
+                          <label className="block text-sm font-medium text-gray-500 mb-1">Assignment Rejection Reason</label>
                           <p className="text-gray-900 whitespace-pre-wrap bg-red-50 p-3 rounded border border-red-200 break-words">
                             {selectedAssignment.rejectionReason}
+                          </p>
+                        </div>
+                      )}
+                      {request && request.reasonOfDenial && (
+                        <div>
+                          <label className="block text-sm font-medium text-gray-500 mb-1">Request Denial Notes</label>
+                          <p className="text-gray-900 whitespace-pre-wrap bg-red-50 p-3 rounded border border-red-200 break-words">
+                            {request.reasonOfDenial}
                           </p>
                         </div>
                       )}

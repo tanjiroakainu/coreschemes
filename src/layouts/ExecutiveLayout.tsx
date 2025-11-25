@@ -11,7 +11,7 @@ import { FaBars } from 'react-icons/fa';
 import { BiDockLeft, BiDockRight } from 'react-icons/bi';
 import { MdLogout } from 'react-icons/md';
 import { FaRegCircleUser } from 'react-icons/fa6';
-import { MdOutlineAssignmentTurnedIn, MdPeople, MdMonitor, MdFactCheck, MdClose } from 'react-icons/md';
+import { MdOutlineAssignmentTurnedIn, MdPeople, MdMonitor } from 'react-icons/md';
 import { signOut } from '@/lib/storage';
 
 interface ExecutiveLayoutProps {
@@ -110,6 +110,14 @@ export default function ExecutiveLayout({ rolePath, roleName: _roleName }: Execu
               onClick={() => setSidebarOpen(false)}
             />
             <SidebarLink
+              href={`/${rolePath}/calendar`}
+              icon={<LuCalendarDays size={22} />}
+              label="Calendar"
+              collapsed={collapsed}
+              active={isActive('calendar')}
+              onClick={() => setSidebarOpen(false)}
+            />
+            <SidebarLink
               href={`/${rolePath}/assignment`}
               icon={<MdOutlineAssignmentTurnedIn size={22} />}
               label="Assignment"
@@ -123,22 +131,6 @@ export default function ExecutiveLayout({ rolePath, roleName: _roleName }: Execu
               label="Notifications"
               collapsed={collapsed}
               active={isActive('assignment-notification')}
-              onClick={() => setSidebarOpen(false)}
-            />
-            <SidebarLink
-              href={`/${rolePath}/completed`}
-              icon={<MdFactCheck size={22} />}
-              label="Completed"
-              collapsed={collapsed}
-              active={isActive('/completed')}
-              onClick={() => setSidebarOpen(false)}
-            />
-            <SidebarLink
-              href={`/${rolePath}/rejected`}
-              icon={<MdClose size={22} />}
-              label="Rejected"
-              collapsed={collapsed}
-              active={isActive('/rejected')}
               onClick={() => setSidebarOpen(false)}
             />
             <SidebarLink

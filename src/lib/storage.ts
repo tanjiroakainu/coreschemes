@@ -659,6 +659,7 @@ export interface ClientRequest {
   dateApproved?: string; // ISO date string
   dateDenied?: string; // ISO date string
   reasonOfDenial?: string; // Reason for denial
+  approvalNotes?: string; // Notes when approving (from availability calendar)
   createdAt: string;
   updatedAt?: string;
 }

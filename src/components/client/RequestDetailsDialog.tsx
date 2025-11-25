@@ -154,6 +154,14 @@ export default function RequestDetailsDialog({
                     <p className="text-gray-700">{new Date(request.dateApproved).toLocaleDateString()}</p>
                   </div>
                 )}
+                {request.approvalNotes && (
+                  <div className="col-span-2">
+                    <label className="block text-sm font-medium mb-1">Approval Notes</label>
+                    <p className="text-gray-700 whitespace-pre-wrap bg-green-50 p-3 rounded border border-green-200">
+                      {request.approvalNotes}
+                    </p>
+                  </div>
+                )}
               </>
             )}
             {request.status === 'denied' && request.deniedBy && (

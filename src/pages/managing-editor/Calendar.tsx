@@ -1,12 +1,11 @@
-import ReadOnlyCalendar from '@/components/shared/ReadOnlyCalendar';
+import RoleCalendar from '@/components/shared/RoleCalendar';
 import Footer from '@/components/shared/Footer';
 
 export default function ManagingEditorCalendar() {
   return (
     <>
-      <ReadOnlyCalendar role="managing-editor" />
+      <RoleCalendar canEdit={true} filterByUser={false} />
       <Footer />
     </>
   );
 }
-

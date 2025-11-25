@@ -11,11 +11,13 @@ import {
 } from '@/lib/storage';
 import AssignToDialog from '@/components/admin/AssignToDialog';
 import { Button } from '@/components/ui/button';
+import RejectedAssignments from '@/components/shared/RejectedAssignments';
+import CompletedAssignments from '@/components/shared/CompletedAssignments';
 
 export default function AdminAssignment() {
   const [pendingRequests, setPendingRequests] = useState<ClientRequest[]>([]);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
-  const [activeTab, setActiveTab] = useState<'pending' | 'preview'>('pending');
+  const [activeTab, setActiveTab] = useState<'pending' | 'preview' | 'rejected' | 'completed'>('pending');
   const [selectedRequest, setSelectedRequest] = useState<ClientRequest | null>(null);
   const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
@@ -132,6 +134,18 @@ export default function AdminAssignment() {
           >
             Assignment Preview
           </TabsTrigger>
+          <TabsTrigger
+            value="rejected"
+            className="data-[state=active]:bg-transparent data-[state=active]:text-amber-600 data-[state=active]:border-b-2 data-[state=active]:border-amber-600 rounded-none"
+          >
+            Rejected
+          </TabsTrigger>
+          <TabsTrigger
+            value="completed"
+            className="data-[state=active]:bg-transparent data-[state=active]:text-amber-600 data-[state=active]:border-b-2 data-[state=active]:border-amber-600 rounded-none"
+          >
+            Completed
+          </TabsTrigger>
         </TabsList>
 
         <div className="mt-6">
@@ -229,7 +243,7 @@ export default function AdminAssignment() {
                 )}
               </div>
             </div>
-          ) : (
+          ) : activeTab === 'preview' ? (
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
               {/* Desktop Table */}
               <div className="hidden md:block overflow-x-auto">
@@ -370,7 +384,17 @@ export default function AdminAssignment() {
                 )}
               </div>
             </div>
-          )}
+          ) : activeTab === 'rejected' ? (
+            <RejectedAssignments
+              title="Rejected Assignments"
+              description="All rejected assignments across all sections."
+            />
+          ) : activeTab === 'completed' ? (
+            <CompletedAssignments
+              title="All Completed Assignments"
+              description="A historical record of every assignment marked as completed across all sections."
+            />
+          ) : null}
         </div>
       </Tabs>
 

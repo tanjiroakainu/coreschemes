@@ -304,6 +304,14 @@ export default function CompletedAssignments({
                           Completed
                         </span>
                       </div>
+                      {request && request.approvalNotes && (
+                        <div>
+                          <label className="block text-sm font-medium text-gray-500 mb-1">Request Approval Notes</label>
+                          <p className="text-gray-900 whitespace-pre-wrap bg-green-50 p-3 rounded border border-green-200">
+                            {request.approvalNotes}
+                          </p>
+                        </div>
+                      )}
                       {request && selectedAssignment.notes && (
                         <div>
                           <label className="block text-sm font-medium text-gray-500 mb-1">Task Notes</label>

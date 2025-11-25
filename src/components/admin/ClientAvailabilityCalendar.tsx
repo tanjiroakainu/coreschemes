@@ -314,6 +314,7 @@ const ClientAvailabilityCalendar = () => {
             status: 'approved',
             approvedBy: adminName,
             dateApproved: new Date().toISOString(),
+            approvalNotes: notes && notes.trim() ? notes.trim() : undefined, // Save notes when approving (only if not empty)
           });
         } else {
           // Set as denied when availability is set to not available
@@ -321,7 +322,7 @@ const ClientAvailabilityCalendar = () => {
             status: 'denied',
             deniedBy: adminName,
             dateDenied: new Date().toISOString(),
-            reasonOfDenial: notes || 'Date marked as not available',
+            reasonOfDenial: notes && notes.trim() ? notes.trim() : 'Date marked as not available',
           });
         }
       }

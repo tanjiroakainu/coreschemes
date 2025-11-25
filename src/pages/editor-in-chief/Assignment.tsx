@@ -22,7 +22,8 @@ import {
 } from '@/lib/storage';
 import SendInviteDialog, { InviteDetails } from '@/components/executive/SendInviteDialog';
 import TeamTaskDialog, { TeamTaskFormData } from '@/components/executive/TeamTaskDialog';
-import ExecutiveCalendar from '@/components/executive/ExecutiveCalendar';
+import RejectedAssignments from '@/components/shared/RejectedAssignments';
+import CompletedAssignments from '@/components/shared/CompletedAssignments';
 import { Button } from '@/components/ui/button';
 import { MdAdd, MdCheck, MdClose, MdEdit, MdDelete } from 'react-icons/md';
 import {
@@ -38,7 +39,7 @@ export default function ExecutiveAssignment() {
   const [assignmentsNeedingApproval, setAssignmentsNeedingApproval] = useState<Assignment[]>([]);
   const [executiveAssignments, setExecutiveAssignments] = useState<Assignment[]>([]);
   const [invitations, setInvitations] = useState<AssignmentInvitation[]>([]);
-  const [activeTab, setActiveTab] = useState<'calendar' | 'pending' | 'approval' | 'invitation'>('calendar');
+  const [activeTab, setActiveTab] = useState<'pending' | 'approval' | 'invitation' | 'rejected' | 'completed'>('pending');
   const [selectedRequest, setSelectedRequest] = useState<ClientRequest | null>(null);
   const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null);
   const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
@@ -396,17 +397,11 @@ export default function ExecutiveAssignment() {
 
   return (
     <div className="px-4 md:px-10 py-6 space-y-6">
-      <h1 className="text-xl sm:text-2xl font-bold text-amber-600">Assignment & Calendar</h1>
+      <h1 className="text-xl sm:text-2xl font-bold text-amber-600">Assignment</h1>
 
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as typeof activeTab)}>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <TabsList className="bg-transparent border-b border-gray-200 rounded-none p-0 h-auto flex flex-wrap overflow-x-auto">
-          <TabsTrigger
-            value="calendar"
-            className="data-[state=active]:bg-transparent data-[state=active]:text-amber-600 data-[state=active]:border-b-2 data-[state=active]:border-amber-600 rounded-none text-sm sm:text-base whitespace-nowrap"
-          >
-            Calendar
-          </TabsTrigger>
           <TabsTrigger
             value="pending"
             className="data-[state=active]:bg-transparent data-[state=active]:text-amber-600 data-[state=active]:border-b-2 data-[state=active]:border-amber-600 rounded-none text-sm sm:text-base whitespace-nowrap"
@@ -427,6 +422,18 @@ export default function ExecutiveAssignment() {
           >
             Invitations
           </TabsTrigger>
+          <TabsTrigger
+            value="rejected"
+            className="data-[state=active]:bg-transparent data-[state=active]:text-amber-600 data-[state=active]:border-b-2 data-[state=active]:border-amber-600 rounded-none text-sm sm:text-base whitespace-nowrap"
+          >
+            Rejected
+          </TabsTrigger>
+          <TabsTrigger
+            value="completed"
+            className="data-[state=active]:bg-transparent data-[state=active]:text-amber-600 data-[state=active]:border-b-2 data-[state=active]:border-amber-600 rounded-none text-sm sm:text-base whitespace-nowrap"
+          >
+            Completed
+          </TabsTrigger>
         </TabsList>
           <Button
             type="button"
@@ -441,9 +448,7 @@ export default function ExecutiveAssignment() {
         </div>
 
         <div className="mt-6">
-          {activeTab === 'calendar' ? (
-            <ExecutiveCalendar />
-          ) : activeTab === 'approval' ? (
+          {activeTab === 'approval' ? (
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
               {/* Desktop Table */}
               <div className="hidden md:block overflow-x-auto">
@@ -845,7 +850,7 @@ export default function ExecutiveAssignment() {
                 )}
               </div>
             </div>
-          ) : (
+          ) : activeTab === 'invitation' ? (
             <div className="space-y-6">
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
                 <div className="p-4 sm:p-6 space-y-6">
@@ -1041,7 +1046,19 @@ export default function ExecutiveAssignment() {
                 </div>
               </div>
             </div>
-          )}
+          ) : activeTab === 'rejected' ? (
+            <RejectedAssignments
+              title="Rejected Assignments"
+              description="All rejected assignments for executives."
+              sectionFilter={['executives']}
+            />
+          ) : activeTab === 'completed' ? (
+            <CompletedAssignments
+              title="Completed Assignments"
+              description="All completed assignments for executives."
+              sectionFilter={['executives']}
+            />
+          ) : null}
         </div>
       </Tabs>
 

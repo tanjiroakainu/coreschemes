@@ -204,6 +204,9 @@ export default function AdminRequests() {
                           Approved By
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Approval Notes
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Assignment Status
                         </th>
                         <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -221,6 +224,9 @@ export default function AdminRequests() {
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Denied By
                         </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Denial Notes
+                        </th>
                       </>
                     )}
                   </tr>
@@ -233,8 +239,8 @@ export default function AdminRequests() {
                           activeTab === 'pending'
                             ? 3
                             : activeTab === 'approved'
-                            ? 6
-                            : 4
+                            ? 7
+                            : 5
                         }
                         className="px-6 py-8 text-center text-gray-500"
                       >
@@ -272,6 +278,17 @@ export default function AdminRequests() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {request.approvedBy || 'N/A'}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-700 max-w-xs">
+                          {request.approvalNotes ? (
+                            <div className="bg-green-50 border border-green-200 rounded-md p-2">
+                              <p className="text-xs whitespace-pre-wrap break-words line-clamp-2">
+                                {request.approvalNotes}
+                              </p>
+                            </div>
+                          ) : (
+                            <span className="text-gray-400 italic">No notes</span>
+                          )}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           {getAssignmentCount(request.id) > 0 ? (
@@ -313,6 +330,17 @@ export default function AdminRequests() {
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                               {request.deniedBy || 'N/A'}
                             </td>
+                            <td className="px-6 py-4 text-sm text-gray-700 max-w-xs">
+                              {request.reasonOfDenial ? (
+                                <div className="bg-red-50 border border-red-200 rounded-md p-2">
+                                  <p className="text-xs whitespace-pre-wrap break-words line-clamp-2">
+                                    {request.reasonOfDenial}
+                                  </p>
+                                </div>
+                              ) : (
+                                <span className="text-gray-400 italic">No notes</span>
+                              )}
+                            </td>
                           </>
                         )}
                       </tr>
@@ -353,7 +381,15 @@ export default function AdminRequests() {
                           <p>Client: {request.clientName || request.clientEmail || 'N/A'}</p>
                           <p>Approved: {request.dateApproved ? formatDate(request.dateApproved) : 'N/A'}</p>
                           <p>By: {request.approvedBy || 'N/A'}</p>
-                          <p>
+                          {request.approvalNotes && (
+                            <div className="mt-2 bg-green-50 border border-green-200 rounded-md p-2">
+                              <p className="text-xs font-medium text-gray-700 mb-1">Approval Notes:</p>
+                              <p className="text-xs text-gray-700 whitespace-pre-wrap break-words">
+                                {request.approvalNotes}
+                              </p>
+                            </div>
+                          )}
+                          <p className="mt-2">
                             Status:{' '}
                             {getAssignmentCount(request.id) > 0
                               ? `Assigned (${getAssignmentCount(request.id)})`
@@ -378,6 +414,14 @@ export default function AdminRequests() {
                           <p>Client: {request.clientName || request.clientEmail || 'N/A'}</p>
                           <p>Denied: {request.dateDenied ? formatDate(request.dateDenied) : 'N/A'}</p>
                           <p>By: {request.deniedBy || 'N/A'}</p>
+                          {request.reasonOfDenial && (
+                            <div className="mt-2 bg-red-50 border border-red-200 rounded-md p-2">
+                              <p className="text-xs font-medium text-gray-700 mb-1">Denial Notes:</p>
+                              <p className="text-xs text-gray-700 whitespace-pre-wrap break-words">
+                                {request.reasonOfDenial}
+                              </p>
+                            </div>
+                          )}
                         </>
                       )}
                     </div>
