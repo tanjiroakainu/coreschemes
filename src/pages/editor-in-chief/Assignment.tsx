@@ -295,6 +295,16 @@ export default function ExecutiveAssignment() {
     if (!staffer) return;
   const locationValue = data.location?.trim();
 
+    // Format time: combine startTime and endTime into "HH:MM - HH:MM" or just "HH:MM"
+    let taskTime: string | undefined = undefined;
+    if (data.startTime && data.startTime.trim()) {
+      const startTime = data.startTime.trim();
+      const endTime = data.endTime && data.endTime.trim() && data.endTime.trim() !== startTime
+        ? data.endTime.trim()
+        : '';
+      taskTime = endTime ? `${startTime} - ${endTime}` : startTime;
+    }
+
     if (editingTask) {
       updateAssignment(editingTask.id, {
         assignedTo: staffer.id,
@@ -304,7 +314,7 @@ export default function ExecutiveAssignment() {
         section: staffer.section,
         taskTitle: data.title,
         taskDate: data.date,
-        taskTime: data.time || undefined,
+        taskTime: taskTime,
         notes: data.description,
       taskLocation: locationValue || undefined,
       });
@@ -318,7 +328,7 @@ export default function ExecutiveAssignment() {
         assignedBy: currentUser.name || 'Executive',
         taskTitle: data.title,
         taskDate: data.date,
-        taskTime: data.time || undefined,
+        taskTime: taskTime,
         notes: data.description,
       taskLocation: locationValue || undefined,
       });
@@ -1069,15 +1079,27 @@ export default function ExecutiveAssignment() {
         onSubmit={handleTaskDialogSubmit}
         initialData={
           editingTask
-            ? {
-                assignmentId: editingTask.id,
-                stafferId: editingTask.assignedTo,
-                title: editingTask.taskTitle || '',
-                description: editingTask.notes || '',
-                date: editingTask.taskDate || editingTask.assignedAt.split('T')[0],
-                time: editingTask.taskTime || '',
-                location: editingTask.taskLocation || '',
-              }
+            ? (() => {
+                // Parse taskTime if it's in "HH:MM - HH:MM" format
+                let startTime = '';
+                let endTime = '';
+                if (editingTask.taskTime) {
+                  const timeParts = editingTask.taskTime.split(' - ');
+                  startTime = timeParts[0]?.trim() || '';
+                  endTime = timeParts[1]?.trim() || '';
+                }
+                
+                return {
+                  assignmentId: editingTask.id,
+                  stafferId: editingTask.assignedTo,
+                  title: editingTask.taskTitle || '',
+                  description: editingTask.notes || '',
+                  date: editingTask.taskDate || editingTask.assignedAt.split('T')[0],
+                  startTime: startTime,
+                  endTime: endTime,
+                  location: editingTask.taskLocation || '',
+                };
+              })()
             : undefined
         }
       />

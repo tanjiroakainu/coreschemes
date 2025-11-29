@@ -15,7 +15,8 @@ export interface TeamTaskFormData {
   title: string;
   description: string;
   date: string;
-  time: string;
+  startTime: string;
+  endTime: string;
   location: string;
 }
 
@@ -40,20 +41,23 @@ export default function TeamTaskDialog({
     title: '',
     description: '',
     date: new Date().toISOString().split('T')[0],
-    time: '',
+    startTime: '',
+    endTime: '',
     location: '',
   });
 
   useEffect(() => {
     if (open) {
       const defaultStafferId = initialData?.stafferId || teamMembers[0]?.id || '';
+      
       setFormData({
         assignmentId: initialData?.assignmentId,
         stafferId: defaultStafferId,
         title: initialData?.title || '',
         description: initialData?.description || '',
         date: initialData?.date || new Date().toISOString().split('T')[0],
-        time: initialData?.time || '',
+        startTime: initialData?.startTime || '',
+        endTime: initialData?.endTime || '',
         location: initialData?.location || '',
       });
     }
@@ -144,17 +148,29 @@ export default function TeamTaskDialog({
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-sm font-medium text-gray-700" htmlFor="time">
-                  Time (optional)
+                <label className="text-sm font-medium text-gray-700" htmlFor="startTime">
+                  Start Time
                 </label>
                 <input
-                  id="time"
+                  id="startTime"
                   type="time"
                   className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-amber-500 focus:border-amber-500"
-                  value={formData.time}
-                  onChange={(e) => handleChange('time', e.target.value)}
+                  value={formData.startTime}
+                  onChange={(e) => handleChange('startTime', e.target.value)}
                 />
               </div>
+            </div>
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-gray-700" htmlFor="endTime">
+                End Time (Optional)
+              </label>
+              <input
+                id="endTime"
+                type="time"
+                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-amber-500 focus:border-amber-500"
+                value={formData.endTime}
+                onChange={(e) => handleChange('endTime', e.target.value)}
+              />
             </div>
 
             <div className="space-y-1">

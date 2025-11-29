@@ -312,6 +312,16 @@ export default function ExecutiveCalendar({ rolePath: _rolePath }: ExecutiveCale
     const staffer = teamMembers.find(m => m.id === data.stafferId);
     if (!staffer) return;
     
+    // Format time: combine startTime and endTime into "HH:MM - HH:MM" or just "HH:MM"
+    let taskTime: string | undefined = undefined;
+    if (data.startTime && data.startTime.trim()) {
+      const startTime = data.startTime.trim();
+      const endTime = data.endTime && data.endTime.trim() && data.endTime.trim() !== startTime
+        ? data.endTime.trim()
+        : '';
+      taskTime = endTime ? `${startTime} - ${endTime}` : startTime;
+    }
+    
     updateAssignment(editingAssignment.id, {
       assignedTo: staffer.id,
       assignedToId: staffer.id,
@@ -320,7 +330,7 @@ export default function ExecutiveCalendar({ rolePath: _rolePath }: ExecutiveCale
       section: staffer.section,
       taskTitle: data.title,
       taskDate: data.date,
-      taskTime: data.time || undefined,
+      taskTime: taskTime,
       notes: data.description,
       taskLocation: data.location || undefined,
     });
@@ -426,15 +436,27 @@ export default function ExecutiveCalendar({ rolePath: _rolePath }: ExecutiveCale
         }}
         teamMembers={teamMembers}
         onSubmit={handleTaskEditSubmit}
-        initialData={editingAssignment ? {
-          assignmentId: editingAssignment.id,
-          stafferId: editingAssignment.assignedToId || editingAssignment.assignedTo,
-          title: editingAssignment.taskTitle || '',
-          description: editingAssignment.notes || '',
-          date: editingAssignment.taskDate || new Date().toISOString().split('T')[0],
-          time: editingAssignment.taskTime || '',
-          location: editingAssignment.taskLocation || '',
-        } : undefined}
+        initialData={editingAssignment ? (() => {
+          // Parse taskTime if it's in "HH:MM - HH:MM" format
+          let startTime = '';
+          let endTime = '';
+          if (editingAssignment.taskTime) {
+            const timeParts = editingAssignment.taskTime.split(' - ');
+            startTime = timeParts[0]?.trim() || '';
+            endTime = timeParts[1]?.trim() || '';
+          }
+          
+          return {
+            assignmentId: editingAssignment.id,
+            stafferId: editingAssignment.assignedToId || editingAssignment.assignedTo,
+            title: editingAssignment.taskTitle || '',
+            description: editingAssignment.notes || '',
+            date: editingAssignment.taskDate || new Date().toISOString().split('T')[0],
+            startTime: startTime,
+            endTime: endTime,
+            location: editingAssignment.taskLocation || '',
+          };
+        })() : undefined}
       />
     </>
   );

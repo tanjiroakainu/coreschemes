@@ -27,7 +27,8 @@ export default function EventDialogue({
     title: '',
     description: '',
     date: '',
-    time: '',
+    startTime: '',
+    endTime: '',
     location: '',
     stafferId: '',
     stafferName: '',
@@ -37,7 +38,8 @@ export default function EventDialogue({
     title: '',
     description: '',
     date: '',
-    time: '',
+    startTime: '',
+    endTime: '',
     location: '',
     stafferId: '',
     stafferName: '',
@@ -62,17 +64,14 @@ export default function EventDialogue({
       const dateStr = startDate.toISOString().split('T')[0];
       const startTime = editEvent.startTime || startDate.toTimeString().slice(0, 5);
       const endTime = (editEvent as any).endTime || '';
-      // Format time as "HH:MM - HH:MM" if endTime exists and is different, otherwise just "HH:MM"
-      const timeStr = endTime && endTime !== startTime 
-        ? `${startTime} - ${endTime}`
-        : startTime;
       
       if (editEvent.task) {
         setTaskData({
           title: (editEvent.title as string).replace(/\s*\([^)]*\)/, '') || '',
           description: editEvent.description || '',
           date: dateStr,
-          time: timeStr,
+          startTime: startTime,
+          endTime: endTime,
           location: editEvent.location || '',
           stafferId: (editEvent as any).stafferId || '',
           stafferName: (editEvent as any).stafferName || editEvent.staffer || '',
@@ -84,7 +83,8 @@ export default function EventDialogue({
           title: (editEvent.title as string).replace(/\s*\([^)]*\)/, '') || '',
           description: editEvent.description || '',
           date: dateStr,
-          time: timeStr,
+          startTime: startTime,
+          endTime: endTime,
           location: editEvent.location || '',
           stafferId: (editEvent as any).stafferId || '',
           stafferName: (editEvent as any).stafferName || editEvent.staffer || '',
@@ -107,7 +107,8 @@ export default function EventDialogue({
         title: '',
         description: '',
         date: dateStr,
-        time: '',
+        startTime: '',
+        endTime: '',
         location: '',
         stafferId: '',
         stafferName: '',
@@ -117,7 +118,8 @@ export default function EventDialogue({
         title: '',
         description: '',
         date: dateStr,
-        time: '',
+        startTime: '',
+        endTime: '',
         location: '',
         stafferId: '',
         stafferName: '',
@@ -132,7 +134,8 @@ export default function EventDialogue({
       title: '',
       description: '',
       date: '',
-      time: '',
+      startTime: '',
+      endTime: '',
       location: '',
       stafferId: '',
       stafferName: '',
@@ -142,7 +145,8 @@ export default function EventDialogue({
       title: '',
       description: '',
       date: '',
-      time: '',
+      startTime: '',
+      endTime: '',
       location: '',
       stafferId: '',
       stafferName: '',
@@ -154,15 +158,9 @@ export default function EventDialogue({
     e.preventDefault();
 
     const currentUser = getCurrentUser();
-    // Handle time - it might be a single time or a range
-    let startTime = eventData.time.trim();
-    let endTime = startTime;
-    
-    if (startTime.includes(' - ')) {
-      const parts = startTime.split(' - ');
-      startTime = parts[0].trim();
-      endTime = parts[1] ? parts[1].trim() : startTime;
-    }
+    // Use startTime and endTime directly
+    const startTime = eventData.startTime.trim() || '';
+    const endTime = eventData.endTime.trim() || startTime;
     
     onAddEvent({
       title: eventData.title,
@@ -189,15 +187,9 @@ export default function EventDialogue({
     e.preventDefault();
 
     const currentUser = getCurrentUser();
-    // Handle time - it might be a single time or a range
-    let startTime = taskData.time.trim();
-    let endTime = startTime;
-    
-    if (startTime.includes(' - ')) {
-      const parts = startTime.split(' - ');
-      startTime = parts[0].trim();
-      endTime = parts[1] ? parts[1].trim() : startTime;
-    }
+    // Use startTime and endTime directly
+    const startTime = taskData.startTime.trim() || '';
+    const endTime = taskData.endTime.trim() || startTime;
 
     const taskWithTime = {
       title: taskData.title,
@@ -278,15 +270,23 @@ export default function EventDialogue({
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Time</label>
+                  <label className="block text-sm font-medium mb-1">Start Time</label>
                   <input
-                    type="text"
-                    value={eventData.time}
-                    onChange={(e) => setEventData({ ...eventData, time: e.target.value })}
+                    type="time"
+                    value={eventData.startTime}
+                    onChange={(e) => setEventData({ ...eventData, startTime: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                    placeholder="HH:MM or HH:MM - HH:MM"
                   />
                 </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">End Time (Optional)</label>
+                <input
+                  type="time"
+                  value={eventData.endTime}
+                  onChange={(e) => setEventData({ ...eventData, endTime: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">Location</label>
@@ -370,15 +370,23 @@ export default function EventDialogue({
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Time</label>
+                  <label className="block text-sm font-medium mb-1">Start Time</label>
                   <input
-                    type="text"
-                    value={taskData.time}
-                    onChange={(e) => setTaskData({ ...taskData, time: e.target.value })}
+                    type="time"
+                    value={taskData.startTime}
+                    onChange={(e) => setTaskData({ ...taskData, startTime: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                    placeholder="HH:MM or HH:MM - HH:MM"
                   />
                 </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">End Time (Optional)</label>
+                <input
+                  type="time"
+                  value={taskData.endTime}
+                  onChange={(e) => setTaskData({ ...taskData, endTime: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">Location</label>
